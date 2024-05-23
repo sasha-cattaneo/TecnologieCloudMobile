@@ -47,10 +47,3 @@ while y<300:
     x_data=x.json()
 
     y += 1
-
-
-
-
-
-
-# &pageToken={nextPageToken}
