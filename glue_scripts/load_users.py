@@ -10,7 +10,7 @@ from awsglue.context import GlueContext
 from awsglue.job import Job
 
 ##### FROM FILE
-users_dataset_path ="s3://tedx-2024-data-catta/commenters.csv"
+users_dataset_path ="s3://tedx-2024-data-catta/data.json"
 
 ###### READ PARAMETERS
 args = getResolvedOptions(sys.argv, ['JOB_NAME'])
@@ -29,10 +29,8 @@ job.init(args['JOB_NAME'], args)
 
 #### READ INPUT FILES TO CREATE AN INPUT DATASET
 users_dataset = spark.read \
-    .option("header","true") \
-    .option("quote", "\"") \
-    .option("escape", "\"") \
-    .csv(users_dataset_path)
+    .option("multiline","true") \
+    .json(users_dataset_path)
     
 users_dataset.printSchema()
 
