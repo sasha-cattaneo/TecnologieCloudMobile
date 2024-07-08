@@ -32,11 +32,16 @@ Future<User> getSingleUser (String videoId) async {
 
 Future<List<User>> createUserList(String tag1, String tag2, String tag3, String? scoreLevel) async {
   var url = Uri.parse('https://3peeyt1nx0.execute-api.us-east-1.amazonaws.com/default/create_userList_by_tags');
-  List<Map<String,String>> tags = [
-    {"tag": tag1},
-    {"tag": tag2},
-    {"tag": tag3}
-  ]; 
+  List<Map<String,String>> tags = [];
+  if(tag1 != ""){
+    tags.add({"tag": tag1});
+  }
+  if(tag2 != ""){
+    tags.add({"tag": tag2});
+  }
+  if(tag3 != ""){
+    tags.add({"tag": tag3});
+  }
 
   final http.Response response = await http.post(url,
     headers: <String, String>{

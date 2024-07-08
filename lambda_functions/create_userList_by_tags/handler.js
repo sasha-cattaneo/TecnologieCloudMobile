@@ -19,7 +19,7 @@ module.exports.get_userList = (event, context, callback) => {
                     body: 'Could not fetch the talks. Tags is null.'
         })
     }
-    
+    console.log("=> tags number:"+ Object.keys(body.tags).length )
     console.log("=> scoreLevel: ["+body.scoreLevel+"]")
     
     
@@ -42,17 +42,34 @@ module.exports.get_userList = (event, context, callback) => {
         }
     }
     
-    console.log("=> tags: [ tag1: ["+body.tags[0].tag+"] tag2: ["+body.tags[1].tag+"] tag3: ["+body.tags[2].tag+"], ["+minScore+"]")
+    var query = "";
     
-    connect_to_db().then(() => {
-        console.log('=> get_all users')
-        user.find({ 
-            $and: [
+    switch (Object.keys(body.tags).length) {
+        case 1:
+            query = { tags: {$elemMatch: { tag: body.tags[0].tag, score: {$gt: minScore } } } }
+            break;
+        case 2:
+            query = 
+            { $and: [
+                { tags: {$elemMatch: { tag: body.tags[0].tag, score: {$gt: minScore } } } },
+                { tags: {$elemMatch: { tag: body.tags[1].tag, score: {$gt: minScore } } } }
+            ]}
+            break;
+        case 3:
+            query = 
+            { $and: [
                 { tags: {$elemMatch: { tag: body.tags[0].tag, score: {$gt: minScore } } } },
                 { tags: {$elemMatch: { tag: body.tags[1].tag, score: {$gt: minScore } } } },
                 { tags: {$elemMatch: { tag: body.tags[2].tag, score: {$gt: minScore } } } }
             ]}
-            )
+            break;
+        default:
+            // code
+    }
+    console.log("=> query: "+JSON.stringify(query))
+    connect_to_db().then(() => {
+        console.log('=> get_all users')
+        user.find(query)
             .then(users => {
                     callback(null, {
                         statusCode: 200,

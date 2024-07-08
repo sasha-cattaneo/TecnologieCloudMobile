@@ -327,7 +327,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ));
                     } else if (snapshot.hasError) {
-                      return Text("main.dart[212] ${snapshot.error}");
+                      return Text("${snapshot.error}");
                     }
 
                     return const CircularProgressIndicator();
