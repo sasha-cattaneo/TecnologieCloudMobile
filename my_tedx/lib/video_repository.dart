@@ -13,7 +13,7 @@ Future<List<Video>> initEmptyListVideo() async {
 
 Future<Video> getSingleVideo (String videoId) async {
   var url = Uri.parse("https://htmetgixmi.execute-api.us-east-1.amazonaws.com/default/get_talk");
-  var v;
+
   final http.Response response = await http.post(url,
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -23,7 +23,7 @@ Future<Video> getSingleVideo (String videoId) async {
     }),
   );
   if (response.statusCode == 200) {
-    v = Video.fromJSON(json.decode(response.body)[0]); 
+    var v = Video.fromJSON(json.decode(response.body)[0]); 
     return v;
   } else {
     throw Exception('Failed to load watch next');
@@ -44,10 +44,11 @@ Future<List<Video>> getWatchNextById(String id) async {
   if (response.statusCode == 200) {
     var l = json.decode(response.body);
     Iterable list;
-    if(l.length != 0)
+    if(l.length != 0){
       list = l[0]["related_videos"];
-    else
+    }else{
       list = l;
+    }
     var videos = list.map((model) => Video.fromJSON(model)).toList();
     return videos;
   } else {

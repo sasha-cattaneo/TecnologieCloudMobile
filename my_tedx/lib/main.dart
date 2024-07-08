@@ -7,6 +7,7 @@ import 'models/video.dart';
 import 'models/user.dart';
 import 'pages/single_video_page.dart';
 import 'pages/single_user_page.dart';
+import 'package:my_tedx/styles/dimens.dart';
 
 void main() => runApp(const MyApp());
 
@@ -51,7 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int init = 0;
 
   final List<String> scoreLevel = <String>['0', '1', '2'];
-  String? scoreLevel_selected;
+  final List<String> scoreLevelText = <String>['Low','Medium','High'];
+  String? scoreLevelSelected;
 
   @override
   void initState() {
@@ -77,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _createUserList() async {
     setState(() {
       init = 3;
-      _users = createUserList(_controllerTagUser1.text, _controllerTagUser2.text, _controllerTagUser3.text, scoreLevel_selected);
+      _users = createUserList(_controllerTagUser1.text, _controllerTagUser2.text, _controllerTagUser3.text, scoreLevelSelected);
     });
   }
 
@@ -98,70 +100,74 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Builder(builder: (context){
             switch(init){
               case 0: {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    TextField(
-                      controller: _controllerTag,
-                      decoration:
-                          const InputDecoration(hintText: 'Enter your favorite tag'),
-                    ),
-                    ElevatedButton(
-                      child: const Text('Search by tag'),
-                      onPressed: () {
-                        page = 1;
-                        _getTalksByTag();
-                      },
-                    ),
-                    TextField(
-                      controller: _controllerId,
-                      decoration:
-                          const InputDecoration(hintText: 'Enter your talk ID'),
-                    ),
-                    ElevatedButton(
-                      child: const Text('Search by ID'),
-                      onPressed: () {
-                        _getWatchNextById();
-                      },
-                    ),
-                    TextField(
-                      controller: _controllerTagUser1,
-                      decoration:
-                          const InputDecoration(hintText: 'Enter your first tag'),
-                    ),
-                    TextField(
-                      controller: _controllerTagUser2,
-                      decoration:
-                          const InputDecoration(hintText: 'Enter your second tag'),
-                    ),
-                    TextField(
-                      controller: _controllerTagUser3,
-                      decoration:
-                          const InputDecoration(hintText: 'Enter your third tag'),
-                    ),
-                    DropdownButton<String>(
-                      value: scoreLevel_selected,
-                      hint: Text("Select a precision level"),
-                      items: scoreLevel.map<DropdownMenuItem<String>>((String value){
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue){
-                        setState(() {
-                          scoreLevel_selected = newValue;
-                        });
-                      }
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.all(Dimens.mainPadding),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      TextField(
+                        controller: _controllerTag,
+                        decoration:
+                            const InputDecoration(hintText: 'Enter your favorite tag'),
                       ),
-                    ElevatedButton(
-                      child: const Text('Create user list'),
-                      onPressed: () {
-                        _createUserList();
-                      },
-                    ),
-                  ],
+                      ElevatedButton(
+                        child: const Text('Search by tag'),
+                        onPressed: () {
+                          page = 1;
+                          _getTalksByTag();
+                        },
+                      ),
+                      TextField(
+                        controller: _controllerId,
+                        decoration:
+                            const InputDecoration(hintText: 'Enter your talk ID'),
+                      ),
+                      ElevatedButton(
+                        child: const Text('Search by ID'),
+                        onPressed: () {
+                          _getWatchNextById();
+                        },
+                      ),
+                      TextField(
+                        controller: _controllerTagUser1,
+                        decoration:
+                            const InputDecoration(hintText: 'Enter your first tag'),
+                      ),
+                      TextField(
+                        controller: _controllerTagUser2,
+                        decoration:
+                            const InputDecoration(hintText: 'Enter your second tag'),
+                      ),
+                      TextField(
+                        controller: _controllerTagUser3,
+                        decoration:
+                            const InputDecoration(hintText: 'Enter your third tag'),
+                      ),
+                      DropdownButton<String>(
+                        value: scoreLevelSelected,
+                        hint: const Text("Select a precision level"),
+                        items: scoreLevel.map<DropdownMenuItem<String>>((String value){
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(scoreLevelText[int.parse(value)]),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue){
+                          setState(() {
+                            scoreLevelSelected = newValue;
+                          });
+                        }
+                        ),
+                      ElevatedButton(
+                        child: const Text('Create user list'),
+                        onPressed: () {
+                          _createUserList();
+                        },
+                      ),
+                    ],
+                  ),
                 );
+                 
               }
               case 1:{
                 return FutureBuilder<List<Talk>>(
@@ -269,7 +275,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ));
                     } else if (snapshot.hasError) {
-                      return Text("main.dart[212] ${snapshot.error}");
+                      return Text("${snapshot.error}");
                     }
 
                     return const CircularProgressIndicator();

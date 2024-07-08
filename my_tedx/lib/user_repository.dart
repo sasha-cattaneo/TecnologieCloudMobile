@@ -13,7 +13,7 @@ Future<List<User>> initEmptyListUser() async {
 
 Future<User> getSingleUser (String videoId) async {
   var url = Uri.parse("https://htmetgixmi.execute-api.us-east-1.amazonaws.com/default/get_talk");
-  var u;
+
   final http.Response response = await http.post(url,
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -23,7 +23,7 @@ Future<User> getSingleUser (String videoId) async {
     }),
   );
   if (response.statusCode == 200) {
-    u = User.fromJSON(json.decode(response.body)[0]); 
+    var u = User.fromJSON(json.decode(response.body)[0]); 
     return u;
   } else {
     throw Exception('Failed to load watch next');

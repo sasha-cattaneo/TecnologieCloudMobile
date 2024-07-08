@@ -4,16 +4,18 @@ import '/video_repository.dart';
 import 'package:my_tedx/styles/dimens.dart';
 
 class SingleVideoPage extends StatelessWidget {
-  SingleVideoPage({super.key, required this.videoId,required this.videoTitle});
+  const SingleVideoPage({super.key, required this.videoId,required this.videoTitle});
 
   final String videoId;
   final String videoTitle;
 
   @override
   Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
-        title : Text("$videoTitle"),
+        title : Text(videoTitle),
       ),
       body: FutureBuilder<Video>(
         future: getSingleVideo(videoId),
@@ -24,34 +26,36 @@ class SingleVideoPage extends StatelessWidget {
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(Dimens.mainPadding),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
                       child: Image.network(
                         myVideo.urlImage,
                       ),
                     ),
+                    const SizedBox(
+                      height: Dimens.mainSpace,
+                    ),
                     Text(
                       "Speaker: ${myVideo.speaker}",
-                      // style: TextTheme.bodyLarge,
+                      style: textTheme.bodyLarge,
                     ),
                     Text(
                       "Duration: ${myVideo.duration}",
-                      // style: TextTheme.bodyLarge,
+                      style: textTheme.bodyLarge,
                     ),
                     Text(
                       "Published at: ${myVideo.publishedAt}",
-                      // style: TextTheme.bodyLarge,
+                      style: textTheme.bodyLarge,
+                    ),
+                    const SizedBox(
+                      height: Dimens.mainSpace,
                     ),
                     Text(
                       myVideo.description,
-                      // style: TextTheme.bodyLarge,
+                      style: textTheme.bodyLarge,
                     )
-                    
-                    
-                  ],
-                  
-                  )
+                  ]
+                )
               );
           } else if (snapshot.hasError) {
             return Text("main.dart[212] ${snapshot.error}");

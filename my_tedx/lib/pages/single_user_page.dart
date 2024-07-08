@@ -3,7 +3,7 @@ import '/models/user.dart';
 import 'package:my_tedx/styles/dimens.dart';
 
 class SingleUserPage extends StatelessWidget {
-  SingleUserPage({super.key, required this.user});
+  const SingleUserPage({super.key, required this.user});
 
   final User user;
 
@@ -13,7 +13,7 @@ class SingleUserPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title : Text("${user.username}"),
+        title : Text(user.username),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(Dimens.mainPadding),
@@ -26,14 +26,18 @@ class SingleUserPage extends StatelessWidget {
               ),
             ),
             Text(
-              "Password: ${user.password}"
+              "Password: ${user.password}",
+              style: textTheme.bodyLarge,
+            ),
+            const SizedBox(
+              height: Dimens.mainSpace,
             ),
             Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Tag",
+                  "Tags",
                   style: textTheme.titleLarge,
                 ),
                 Wrap(
