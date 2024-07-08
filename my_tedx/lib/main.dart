@@ -283,13 +283,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               }
               case 3:{
+                var t = "#";
+                (_controllerTagUser1.text != "") ? t+="[${_controllerTagUser1.text}]" : t=t;
+                (_controllerTagUser2.text != "") ? t+="[${_controllerTagUser2.text}]" : t=t;
+                (_controllerTagUser3.text != "") ? t+="[${_controllerTagUser3.text}]" : t=t;
+
                 return FutureBuilder<List<User>>(
                   future: _users,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Scaffold(
                           appBar: AppBar(
-                            title: Text("#${_controllerId.text}"),
+                            title: Text(
+                              t,
+                            ),
                           ),
                           body: ListView.builder(
                             itemCount: snapshot.data!.length,
